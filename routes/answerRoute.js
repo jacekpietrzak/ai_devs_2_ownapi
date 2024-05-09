@@ -6,7 +6,7 @@ const { getAnswer } = require('../controllers/answerController');
 answer.get('/', async (req, res, next) => {
   return res
     .status(200)
-    .json({ status: 'Success', message: 'All logs retrieved successfully' });
+    .json({ status: 'Success', message: 'All answers retrieved successfully' });
 
   try {
     const logs = await answer();
