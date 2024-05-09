@@ -3,21 +3,18 @@ const answer = Router();
 
 const { getAnswer } = require('../controllers/answerController');
 
-answer.get('/', async (req, res, next) => {
-  return res
-    .status(200)
-    .json({
-      status: 'Success',
-      message: 'All answers retrieved successfully 2',
-    });
-
+answer.post('/', async (req, res, next) => {
   try {
-    const logs = await answer();
+    const question = req.body.question;
+    console.log({ question: question });
+
+    const model = 'gpt-4-turbo';
+    const systemMessage = `Alice here. I am a language model assistant. I am here to help you with any questions you have.`;
+    const humanMessage = question;
+    const answer = await getAnswer(model, systemMessage, humanMessage);
 
     return res.status(200).json({
-      data: logs,
-      status: 'Success',
-      message: 'All logs retrieved successfully',
+      reply: answer,
     });
   } catch (error) {
     return res
@@ -25,30 +22,5 @@ answer.get('/', async (req, res, next) => {
       .json({ status: 'error', message: 'something went wrong' });
   }
 });
-
-// logs.post('/', async (req, res, next) => {
-//   try {
-//     const { error } = logValidationSchema.validate(req.body);
-//     if (error) {
-//       const value = error.details[0].context.label;
-//       return res.status(400).send({
-//         status: 'error',
-//         message: `missing required ${value} - field`,
-//       });
-//     }
-
-//     const log = await createLog(req.body);
-
-//     return res.status(200).json({
-//       data: log,
-//       status: 'Success',
-//       message: 'New log created successfully',
-//     });
-//   } catch (error) {
-//     return res
-//       .status(500)
-//       .json({ status: 'error', message: 'something went wrong' });
-//   }
-// });
 
 module.exports = answer;
